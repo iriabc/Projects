@@ -55,5 +55,29 @@ class Region:
         # map.bluemarble()
         map.etopo()
         plot.title('Earthquakes locations')
-        plot.xlabel('')
-        plot.ylabel('')
+
+    def plot_color_depth(self, map, data):
+        plot.figure()
+        # map.drawcoastlines(linewidth=1)
+        # map.drawcountries(linewidth=1)
+        x,y = map(self.longitudes, self.latitudes)
+        colors = map.scatter(x, y, marker='o', s=80, lw=0, c=data[:,3], cmap=plot.cm.jet)
+        plot.colorbar(colors)
+        map.drawparallels(self.parallels, labels=[False,True,True,False])
+        map.drawmeridians(self.meridians, labels=[True,False,False,True])
+        map.etopo()
+        plot.title('Earthquakes depth')
+
+    def plot_earthquake_magnitude(self, map, data):
+        plot.figure()
+        # map.drawcoastlines(linewidth=1)
+        # map.drawcountries(linewidth=1)
+        x, y = map(self.longitudes, self.latitudes)
+        min_size = 20
+        mag_size = data[:,4]*min_size
+        colors = map.scatter(x, y, marker='o', s=mag_size, lw=0, c=data[:, 4], cmap=plot.cm.jet)
+        plot.colorbar(colors)
+        map.drawparallels(self.parallels, labels=[False,True,True,False])
+        map.drawmeridians(self.meridians, labels=[True,False,False,True])
+        map.etopo()
+        plot.title('Earthquakes magnitudes')
