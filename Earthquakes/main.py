@@ -1,6 +1,7 @@
 import csv
 import requests
 
+from database import *
 from seismicModel import *
 from settings import *
 
@@ -29,7 +30,7 @@ def createEarthquakes(earthquakes_data):
     return earthquakes
 
 
-def saveEarthquakesData(earthquakes):
+def createEarthquakesFile(earthquakes):
     with open('seismicData.csv', 'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['name','latitude','longitude','depth','magnitude'])
@@ -64,13 +65,33 @@ def plotEarthquakes():
     plot.show()
 
 
+def storeData(earthquakes):
+    for element in earthquakes:
+        row_data = {
+            'place': element.name,
+            'lat': element.latitude,
+            'lon': element.longitude,
+            'depth': element.depth,
+            'mag': element.magnitude
+        }
+
+        saveEarthquakeData(row_data, data_type='EARTHQUAKES')
+        saveEarthquakeData(row_data, data_type='BIG_EARTHQUAKES')
+
+
 def main():
     raw_data = retrieveSeismicData()
     earthquakes = createEarthquakes(raw_data)
-    saveEarthquakesData(earthquakes)
+    createEarthquakesFile(earthquakes)
+    storeData(earthquakes)
     plotEarthquakes()
-
+    # deleteDataTable()
 
 
 if __name__ == "__main__":
     main()
+
+
+# ToDo:
+# - Circulos linea negra
+# - Extraer datos con magnitud negativa
