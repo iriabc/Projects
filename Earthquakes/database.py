@@ -3,7 +3,7 @@ from mysql.connector import errorcode
 
 from settings import *
 
-def connectDb():
+def connect_db():
     try:
         db = mysql.connector.connect(user=USER,
                                       password=PASSWORD,
@@ -18,13 +18,13 @@ def connectDb():
     return db
 
 
-def saveEarthquakeData(row_data, data_type):
+def save_earthquake_data(row_data, data_type):
     if data_type == 'EARTHQUAKES':
         DB_TABLE = 'all_earthquakes'
     elif data_type == 'BIG_EARTHQUAKES':
         DB_TABLE = 'big_earthquakes'
 
-    db = connectDb()
+    db = connect_db()
     cursor = db.cursor()
 
     add_earthquakes = ("INSERT INTO " + DB_TABLE + " "
@@ -38,8 +38,8 @@ def saveEarthquakeData(row_data, data_type):
     db.close()
 
 
-def deleteDataTable():
-    db = connectDb()
+def delete_data_table():
+    db = connect_db()
     cursor = db.cursor()
     cursor.execute("TRUNCATE TABLE all_earthquakes")
     cursor.execute("TRUNCATE TABLE big_earthquakes")

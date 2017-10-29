@@ -2,13 +2,14 @@ import csv
 import requests
 
 from database import *
-from seismicModel import *
+from earthquakeModel import *
+from regionModel import *
 from settings import *
 
 
-def retrieveSeismicData():
-    base_url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?'
-    format = 'geojson'
+def retrieve_seismic_data():
+    base_url = BASE_URL
+    format = FORMAT
     url = base_url + 'format=' + format + '&starttime=' + START_DATE + '&endtime=' + END_DATE
     response = requests.get(url)
     raw_data = response.json()
@@ -16,7 +17,7 @@ def retrieveSeismicData():
     return raw_data
 
 
-def createEarthquakes(earthquakes_data):
+def create_earthquakes(earthquakes_data):
     earthquakes = []
     # all_magnitudes = []
     for row in earthquakes_data['features']:
@@ -30,8 +31,8 @@ def createEarthquakes(earthquakes_data):
     return earthquakes
 
 
-def createEarthquakesFile(earthquakes):
-    with open('seismicData.csv', 'wb') as csvfile:
+def create_earthquakes_file(file_name, earthquakes):
+    with open(file_name, 'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['name','latitude','longitude','depth','magnitude'])
         for earthquake in earthquakes:
@@ -43,29 +44,25 @@ def createEarthquakesFile(earthquakes):
             writer.writerow([name, lat, lon, depth, mag])
 
 
-def plotEarthquakes():
-    file_name = 'seismicData.csv'
+def plot_earthquakes(file_name):
+    """
+    Instantiate Region, create basemap object (and load lat ang lon data)
+    and plot earthquakes locations, depths and magnitudes.
+    """
     data = numpy.genfromtxt(file_name, delimiter=',', usecols=(0, 1, 2, 3, 4))
 
-    # Instanciate the mapRegion class
     region = Region(lat_column=1, lon_column=2)
 
-    # Create basemap object from file and load lat and long
     map = region.create_map_object(data)
 
-    # Map with stations
-    region.plot_geographic_points(map)
-
-    # Map the depth with colors
-    region.plot_color_depth(map, data)
-
-    # Map the magnitude with colors
-    region.plot_earthquake_magnitude(map, data)
+    region.plot_locations(map)
+    region.plot_depths(map, data)
+    region.plot_magnitudes(map, data)
 
     plot.show()
 
 
-def storeData(earthquakes):
+def store_data(earthquakes):
     for element in earthquakes:
         row_data = {
             'place': element.name,
@@ -75,17 +72,17 @@ def storeData(earthquakes):
             'mag': element.magnitude
         }
 
-        saveEarthquakeData(row_data, data_type='EARTHQUAKES')
-        saveEarthquakeData(row_data, data_type='BIG_EARTHQUAKES')
+        save_earthquake_data(row_data, data_type='EARTHQUAKES')
+        save_earthquake_data(row_data, data_type='BIG_EARTHQUAKES')
 
 
 def main():
-    raw_data = retrieveSeismicData()
-    earthquakes = createEarthquakes(raw_data)
-    createEarthquakesFile(earthquakes)
-    storeData(earthquakes)
-    plotEarthquakes()
-    # deleteDataTable()
+    raw_data = retrieve_seismic_data()
+    earthquakes = create_earthquakes(raw_data)
+    create_earthquakes_file('seismicData.csv', earthquakes)
+    store_data(earthquakes)
+    plot_earthquakes('seismicData.csv')
+    # delete_data_table()
 
 
 if __name__ == "__main__":
@@ -93,5 +90,5 @@ if __name__ == "__main__":
 
 
 # ToDo:
-# - Circulos linea negra
-# - Extraer datos con magnitud negativa
+# - Black border
+# - Remove data with negative magnitudes
