@@ -17,16 +17,16 @@ def retrieve_seismic_data():
     return raw_data
 
 
+def isValidData(row):
+    return False if row['properties']['mag'] <= 0 else True
+
 def create_earthquakes(earthquakes_data):
     earthquakes = []
-    # all_magnitudes = []
     for row in earthquakes_data['features']:
-        seismic_point = Earthquake(row)
-        earthquakes.append(seismic_point)
-        # all_magnitudes.append(seismic_point.magnitude)
-
-    # print (max(all_magnitudes))
-    # print (min(all_magnitudes))
+        if isValidData(row) == True:
+            import ipdb; ipdb.set_trace()
+            seismic_point = Earthquake(row)
+            earthquakes.append(seismic_point)
 
     return earthquakes
 
@@ -50,9 +50,9 @@ def plot_earthquakes(file_name):
     Instantiate Region, create basemap object (and load lat ang lon data)
     and plot earthquakes locations, depths and magnitudes.
     """
-    data = numpy.genfromtxt(file_name, delimiter=',', usecols=(0, 1, 2, 3, 4))
+    data = numpy.genfromtxt(file_name, delimiter=',', usecols=(0, 1, 2, 3, 4, 5))
 
-    region = Region(lat_column=1, lon_column=2)
+    region = Region(lat_column=2, lon_column=3)
 
     map = region.create_map_object(data)
 
@@ -93,4 +93,3 @@ if __name__ == "__main__":
 
 # ToDo:
 # - Black border
-# - Remove data with negative magnitudes
