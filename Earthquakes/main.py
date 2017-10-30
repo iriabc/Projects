@@ -72,15 +72,15 @@ def store_data(earthquakes):
             'mag': element.magnitude
         }
 
-        save_earthquake_data(row_data, data_type='EARTHQUAKES')
-        save_earthquake_data(row_data, data_type='BIG_EARTHQUAKES')
+        save_earthquake_data(row_data)
 
 
 def main():
     raw_data = retrieve_seismic_data()
     earthquakes = create_earthquakes(raw_data)
     create_earthquakes_file('seismicData.csv', earthquakes)
-    store_data(earthquakes)
+    create_earthquakes_table()
+    # store_data(earthquakes)
     plot_earthquakes('seismicData.csv')
     # delete_data_table()
 

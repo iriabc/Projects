@@ -18,18 +18,39 @@ def connect_db():
     return db
 
 
-def save_earthquake_data(row_data, data_type):
-    if data_type == 'EARTHQUAKES':
-        DB_TABLE = 'all_earthquakes'
-    elif data_type == 'BIG_EARTHQUAKES':
-        DB_TABLE = 'big_earthquakes'
-
+def create_earthquakes_table():
     db = connect_db()
     cursor = db.cursor()
 
-    add_earthquakes = ("INSERT INTO " + DB_TABLE + " "
-                    "(location, latitude, longitude, depth, magnitude)"
-                    "VALUES (%(place)s, %(lat)s, %(lon)s, %(depth)s, %(mag)s)")
+    create_table = (
+        "CREATE TABLE IF NOT EXISTS `earthquakes` ("
+        "   `id` int(11) NOT NULL AUTO_INCREMENT,"
+        "   `date` date NOT NULL,"
+        "   `location` varchar(40) NOT NULL,"
+        "   `latitude` decimal(5,3) NOT NULL,"
+        "   `longitude` decimal(5,3) NOT NULL,"
+        "   `depth` decimal(5,3) NOT NULL,"
+        "   `magnitude` decimal(5,3) NOT NULL,"
+        "   PRIMARY KEY (`id`),"
+        "   UNIQUE KEY `unique_index` (`date`, `location`)"
+        ");"
+    )
+
+    cursor.execute(create_table)
+
+    db.commit()
+    cursor.close()
+    db.close()
+
+def save_earthquake_data(row_data):
+    db = connect_db()
+    cursor = db.cursor()
+
+    add_earthquakes = (
+        "INSERT INTO `earthquakes`"
+        "(location, latitude, longitude, depth, magnitude)"
+        "VALUES (%(place)s, %(lat)s, %(lon)s, %(depth)s, %(mag)s)"
+    )
 
     cursor.execute(add_earthquakes, row_data)
 
@@ -41,6 +62,5 @@ def save_earthquake_data(row_data, data_type):
 def delete_data_table():
     db = connect_db()
     cursor = db.cursor()
-    cursor.execute("TRUNCATE TABLE all_earthquakes")
-    cursor.execute("TRUNCATE TABLE big_earthquakes")
+    cursor.execute("TRUNCATE TABLE earthquakes")
     db.close()
