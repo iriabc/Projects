@@ -16,41 +16,42 @@ def retrieve_seismic_data():
     return raw_data
 
 
-def isValidData(row):
+def is_valid_data(row):
     return False if row['properties']['mag'] <= 0 else True
+
 
 def create_earthquakes(earthquakes_data):
     earthquakes = []
     for row in earthquakes_data['features']:
-        if isValidData(row) == True:
+        if is_valid_data(row) == True:
             seismic_point = Earthquake(row)
             earthquakes.append(seismic_point)
 
     return earthquakes
 
 
-def create_earthquakes_file(file_name, earthquakes):
-    with open(file_name, 'wb') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',')
-        writer.writerow(['name', 'date', 'latitude','longitude','depth','magnitude'])
-        for earthquake in earthquakes:
-            name = earthquake.name
-            date = earthquake.date.strftime('%d-%m-%Y')
-            lat = earthquake.latitude
-            lon = earthquake.longitude
-            depth = earthquake.depth
-            mag = earthquake.magnitude
-            writer.writerow([name, date, lat, lon, depth, mag])
+def prepare_data_to_plot(earthquakes):
+    arrays = []
+    for earthquake in earthquakes:
+        lat = earthquake.latitude
+        lon = earthquake.longitude
+        depth = earthquake.depth
+        mag = earthquake.magnitude
+        arrays.append([lat, lon, depth, mag])
+
+    data = numpy.asarray(arrays, dtype=numpy.float32)
+
+    return data
 
 
-def plot_earthquakes(file_name):
+def plot_earthquakes(earthquakes):
     """
     Instantiate Region, create basemap object (and load lat ang lon data)
     and plot earthquakes locations, depths and magnitudes.
     """
-    data = numpy.genfromtxt(file_name, delimiter=',', usecols=(0, 1, 2, 3, 4, 5))
+    data = prepare_data_to_plot(earthquakes)
 
-    region = Region(lat_column=2, lon_column=3)
+    region = Region(lat_column=0, lon_column=1)
 
     map = region.create_map_object(data)
 
@@ -69,10 +70,10 @@ def store_data(earthquakes):
 def main():
     raw_data = retrieve_seismic_data()
     earthquakes = create_earthquakes(raw_data)
-    create_earthquakes_file('seismicData.csv', earthquakes)
-    create_earthquakes_table()
+
+    # create_earthquakes_table()
     store_data(earthquakes)
-    plot_earthquakes('seismicData.csv')
+    plot_earthquakes(earthquakes)
     # delete_data_table()
 
 
