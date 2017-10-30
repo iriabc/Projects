@@ -34,14 +34,15 @@ def create_earthquakes(earthquakes_data):
 def create_earthquakes_file(file_name, earthquakes):
     with open(file_name, 'wb') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
-        writer.writerow(['name','latitude','longitude','depth','magnitude'])
+        writer.writerow(['name', 'date', 'latitude','longitude','depth','magnitude'])
         for earthquake in earthquakes:
             name = earthquake.name
+            date = earthquake.date.strftime('%d-%m-%Y')
             lat = earthquake.latitude
             lon = earthquake.longitude
             depth = earthquake.depth
             mag = earthquake.magnitude
-            writer.writerow([name, lat, lon, depth, mag])
+            writer.writerow([name, date, lat, lon, depth, mag])
 
 
 def plot_earthquakes(file_name):
@@ -91,4 +92,5 @@ if __name__ == "__main__":
 
 # ToDo:
 # - Black border
+# - Add date to database in correct format
 # - Remove data with negative magnitudes
