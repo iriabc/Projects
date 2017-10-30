@@ -21,8 +21,8 @@ class Region:
         self.meridians = []
 
     def create_map_object(self, data):
-        self.latitudes = data[:,1]
-        self.longitudes = data[:,2]
+        self.latitudes = data[:,2]
+        self.longitudes = data[:,3]
         lat_min = LAT_MIN
         lat_max = LAT_MAX
         lon_min = LON_MIN
@@ -51,7 +51,7 @@ class Region:
         # map.drawcountries(linewidth=1)
         x,y = map(self.longitudes, self.latitudes)
         colors = map.scatter(
-            x, y, marker='o', s=80, lw=0, c=data[:,3], cmap=plot.cm.jet)
+            x, y, marker='o', s=80, lw=0, c=data[:,4], cmap=plot.cm.jet)
         plot.colorbar(colors)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
@@ -64,9 +64,9 @@ class Region:
         # map.drawcountries(linewidth=1)
         x, y = map(self.longitudes, self.latitudes)
         min_size = 20
-        mag_size = data[:,4]*min_size
+        mag_size = data[:,5]*min_size
         colors = map.scatter(
-            x, y, marker='o', s=mag_size, lw=0, c=data[:, 4], cmap=plot.cm.jet)
+            x, y, marker='o', s=mag_size, lw=0, c=data[:, 5], cmap=plot.cm.jet)
         plot.colorbar(colors)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])

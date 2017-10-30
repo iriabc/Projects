@@ -26,13 +26,13 @@ def create_earthquakes_table():
         "CREATE TABLE IF NOT EXISTS `earthquakes` ("
         "   `id` int(11) NOT NULL AUTO_INCREMENT,"
         "   `date` date NOT NULL,"
-        "   `location` varchar(40) NOT NULL,"
-        "   `latitude` decimal(5,3) NOT NULL,"
-        "   `longitude` decimal(5,3) NOT NULL,"
-        "   `depth` decimal(5,3) NOT NULL,"
-        "   `magnitude` decimal(5,3) NOT NULL,"
+        "   `location` varchar(100) NOT NULL,"
+        "   `latitude` decimal(11,3) NOT NULL,"
+        "   `longitude` decimal(11,3) NOT NULL,"
+        "   `depth` decimal(11,3) NOT NULL,"
+        "   `magnitude` decimal(11,3) NOT NULL,"
         "   PRIMARY KEY (`id`),"
-        "   UNIQUE KEY `unique_index` (`date`, `location`)"
+        "   UNIQUE KEY `unique_index` (`date`, `location`, `depth`, `magnitude`)"
         ");"
     )
 
@@ -48,8 +48,10 @@ def save_earthquake_data(row_data):
 
     add_earthquakes = (
         "INSERT INTO `earthquakes`"
-        "(location, latitude, longitude, depth, magnitude)"
-        "VALUES (%(place)s, %(lat)s, %(lon)s, %(depth)s, %(mag)s)"
+        "(date, location, latitude, longitude, depth, magnitude)"
+        "VALUES (%(date)s, %(place)s, %(lat)s, %(lon)s, %(depth)s, %(mag)s)"
+        "ON DUPLICATE KEY UPDATE id=id"
+        ";"
     )
 
     cursor.execute(add_earthquakes, row_data)

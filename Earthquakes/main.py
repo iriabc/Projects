@@ -67,10 +67,11 @@ def store_data(earthquakes):
     for element in earthquakes:
         row_data = {
             'place': element.name,
-            'lat': element.latitude,
-            'lon': element.longitude,
-            'depth': element.depth,
-            'mag': element.magnitude
+            'date': element.date,  # Convert this to something the database understands
+            'lat': round(element.latitude, 3),
+            'lon': round(element.longitude, 3),
+            'depth': round(element.depth, 3),
+            'mag': round(element.magnitude, 3)
         }
 
         save_earthquake_data(row_data)
@@ -81,7 +82,7 @@ def main():
     earthquakes = create_earthquakes(raw_data)
     create_earthquakes_file('seismicData.csv', earthquakes)
     create_earthquakes_table()
-    # store_data(earthquakes)
+    store_data(earthquakes)
     plot_earthquakes('seismicData.csv')
     # delete_data_table()
 
@@ -92,5 +93,4 @@ if __name__ == "__main__":
 
 # ToDo:
 # - Black border
-# - Add date to database in correct format
 # - Remove data with negative magnitudes
