@@ -64,14 +64,14 @@ def plot_earthquakes(earthquakes):
 
 def store_data(earthquakes):
     for earthquake in earthquakes:
-        earthquake.save
+        earthquake.save()
 
 
 def main():
     raw_data = retrieve_seismic_data()
     earthquakes = create_earthquakes(raw_data)
 
-    # create_earthquakes_table()
+    create_earthquakes_table()
     store_data(earthquakes)
     plot_earthquakes(earthquakes)
     # delete_data_table()
