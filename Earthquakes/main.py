@@ -1,7 +1,6 @@
 import csv
 import requests
 
-from database import *
 from earthquakeModel import *
 from regionModel import *
 from settings import *
@@ -24,7 +23,6 @@ def create_earthquakes(earthquakes_data):
     earthquakes = []
     for row in earthquakes_data['features']:
         if isValidData(row) == True:
-            import ipdb; ipdb.set_trace()
             seismic_point = Earthquake(row)
             earthquakes.append(seismic_point)
 
@@ -64,17 +62,8 @@ def plot_earthquakes(file_name):
 
 
 def store_data(earthquakes):
-    for element in earthquakes:
-        row_data = {
-            'place': element.name,
-            'date': element.date,  # Convert this to something the database understands
-            'lat': round(element.latitude, 3),
-            'lon': round(element.longitude, 3),
-            'depth': round(element.depth, 3),
-            'mag': round(element.magnitude, 3)
-        }
-
-        save_earthquake_data(row_data)
+    for earthquake in earthquakes:
+        earthquake.save
 
 
 def main():
