@@ -42,6 +42,7 @@ def create_earthquakes_table():
     cursor.close()
     db.close()
 
+
 def save_earthquake_data(row_data):
     db = connect_db()
     cursor = db.cursor()
@@ -59,6 +60,25 @@ def save_earthquake_data(row_data):
     db.commit()
     cursor.close()
     db.close()
+
+
+def query_earthquake_data(magnitude):
+    db = connect_db()
+    cursor = db.cursor()
+
+    query = ("SELECT location, magnitude, date FROM earthquakes "
+             "WHERE magnitude >= " + str(magnitude))
+
+    cursor.execute(query)
+
+    for (location, magnitude, date) in cursor:
+        print("{}: earthquake of magnitude {} on {}".format(
+            location, magnitude, date))
+
+    cursor.close()
+    db.close()
+
+
 
 
 def delete_data_table():

@@ -1,4 +1,3 @@
-import csv
 import requests
 
 from earthquakeModel import *
@@ -74,12 +73,9 @@ def main():
     create_earthquakes_table()
     store_data(earthquakes)
     plot_earthquakes(earthquakes)
+    query_earthquake_data(min_magnitude=5)
     # delete_data_table()
 
 
 if __name__ == "__main__":
     main()
-
-
-# ToDo:
-# - Black border
