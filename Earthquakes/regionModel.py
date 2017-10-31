@@ -31,10 +31,10 @@ class Region:
             llcrnrlon=lon_min, urcrnrlon=lon_max, resolution='l')
         self.parallels = numpy.linspace(lat_min, lat_max, 5)
         self.meridians = numpy.linspace(lon_min, lon_max, 5)
-        return (map)
+        return map
 
     def plot_locations(self, map):
-        plot.figure()
+        figure = plot.figure()
         # map.drawcoastlines(linewidth=1)
         # map.drawcountries(linewidth=1)
         x,y = map(self.longitudes, self.latitudes)
@@ -44,9 +44,10 @@ class Region:
         # map.bluemarble()
         map.etopo()
         plot.title('Earthquakes locations')
+        return figure
 
     def plot_depths(self, map, data):
-        plot.figure()
+        figure = plot.figure()
         # map.drawcoastlines(linewidth=1)
         # map.drawcountries(linewidth=1)
         x,y = map(self.longitudes, self.latitudes)
@@ -57,9 +58,10 @@ class Region:
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
         map.etopo()
         plot.title('Earthquakes depth')
+        return figure
 
     def plot_magnitudes(self, map, data):
-        plot.figure()
+        figure = plot.figure()
         # map.drawcoastlines(linewidth=1)
         # map.drawcountries(linewidth=1)
         x, y = map(self.longitudes, self.latitudes)
@@ -72,3 +74,4 @@ class Region:
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
         map.etopo()
         plot.title('Earthquakes magnitudes')
+        return figure

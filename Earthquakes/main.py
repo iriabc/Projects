@@ -54,14 +54,23 @@ def plot_earthquakes(earthquakes):
 
     map = region.create_map_object(data)
 
-    region.plot_locations(map)
-    region.plot_depths(map, data)
-    region.plot_magnitudes(map, data)
+    loc_figure = region.plot_locations(map)
+    depth_figure = region.plot_depths(map, data)
+    mag_figure = region.plot_magnitudes(map, data)
 
-    plot.show()
+    return loc_figure, depth_figure, mag_figure
+
+
+def save_plots(earthquakes):
+    loc_figure, depth_figure, mag_figure = plot_earthquakes(earthquakes)
+
+    loc_figure.savefig('figures/Locations {} to {}'.format(START_DATE, END_DATE))
+    depth_figure.savefig('figures/Depths {} to {}'.format(START_DATE, END_DATE))
+    mag_figure.savefig('figures/Magnitudes {} to {}'.format(START_DATE, END_DATE))
 
 
 def store_data(earthquakes):
+    create_earthquakes_table()
     for earthquake in earthquakes:
         earthquake.save()
 
@@ -70,9 +79,8 @@ def main():
     raw_data = retrieve_seismic_data()
     earthquakes = create_earthquakes(raw_data)
 
-    create_earthquakes_table()
     store_data(earthquakes)
-    plot_earthquakes(earthquakes)
+    save_plots(earthquakes)
     query_earthquake_data(min_magnitude=5)
     # delete_data_table()
 
