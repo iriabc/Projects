@@ -82,7 +82,6 @@ def main():
     store_data(earthquakes)
     save_plots(earthquakes)
     query_earthquake_data(min_magnitude=5)
-    # delete_data_table()
 
 
 if __name__ == "__main__":
