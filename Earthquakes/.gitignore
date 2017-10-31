@@ -1,2 +1,6 @@
+# Ignore files
 *.pyc
+
+#Ignore folders
 .idea/
+figures/

@@ -35,25 +35,20 @@ class Region:
 
     def plot_locations(self, map):
         figure = plot.figure()
-        # map.drawcoastlines(linewidth=1)
-        # map.drawcountries(linewidth=1)
         x,y = map(self.longitudes, self.latitudes)
         map.plot(x, y, 'or', markersize=3)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
-        # map.bluemarble()
         map.etopo()
         plot.title('Earthquakes locations')
         return figure
 
     def plot_depths(self, map, data):
         figure = plot.figure()
-        # map.drawcoastlines(linewidth=1)
-        # map.drawcountries(linewidth=1)
         x,y = map(self.longitudes, self.latitudes)
         colors = map.scatter(
             x, y, marker='o', s=80, lw=0, c=data[:,2], cmap=plot.cm.jet)
-        plot.colorbar(colors)
+        plot.colorbar(colors, orientation='horizontal', pad=0.2)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
         map.etopo()
@@ -62,14 +57,12 @@ class Region:
 
     def plot_magnitudes(self, map, data):
         figure = plot.figure()
-        # map.drawcoastlines(linewidth=1)
-        # map.drawcountries(linewidth=1)
         x, y = map(self.longitudes, self.latitudes)
         min_size = 20
         mag_size = data[:,3]*min_size
         colors = map.scatter(
             x, y, marker='o', s=mag_size, lw=0, c=data[:, 3], cmap=plot.cm.jet)
-        plot.colorbar(colors)
+        plot.colorbar(colors, orientation='horizontal', pad=0.2)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
         map.etopo()
