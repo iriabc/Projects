@@ -64,9 +64,12 @@ def plot_earthquakes(earthquakes):
 def save_plots(earthquakes):
     loc_figure, depth_figure, mag_figure = plot_earthquakes(earthquakes)
 
-    loc_figure.savefig('figures/Locations {} to {}'.format(START_DATE, END_DATE))
-    depth_figure.savefig('figures/Depths {} to {}'.format(START_DATE, END_DATE))
-    mag_figure.savefig('figures/Magnitudes {} to {}'.format(START_DATE, END_DATE))
+    loc_figure.savefig('figures/Locations {} to {}'.format(START_DATE, END_DATE),
+                       dpi=800)
+    depth_figure.savefig('figures/Depths {} to {}'.format(START_DATE, END_DATE),
+                         dpi=800)
+    mag_figure.savefig('figures/Magnitudes {} to {}'.format(START_DATE, END_DATE),
+                       dpi=800)
 
 
 def store_data(earthquakes):
