@@ -62,15 +62,16 @@ def save_earthquake_data(row_data):
     db.close()
 
 
-def query_earthquake_data(magnitude):
+def query_earthquake_data(min_magnitude):
     db = connect_db()
     cursor = db.cursor()
 
     query = ("SELECT location, magnitude, date FROM earthquakes "
-             "WHERE magnitude >= " + str(magnitude))
+             "WHERE magnitude >= " + str(min_magnitude))
 
     cursor.execute(query)
 
+    print("Stored earthquakes with magnitude greater than {}:".format(min_magnitude))
     for (location, magnitude, date) in cursor:
         print("{}: earthquake of magnitude {} on {}".format(
             location, magnitude, date))
