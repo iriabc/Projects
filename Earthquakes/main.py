@@ -85,11 +85,11 @@ def save_figures(path, earthquakes):
     loc_figure, depth_figure, mag_figure = generate_plots(earthquakes)
 
     loc_figure.savefig(path + 'Locations {} to {}'.format(START_DATE, END_DATE),
-                       dpi=800)
+                       dpi=500)
     depth_figure.savefig(path + 'Depths {} to {}'.format(START_DATE, END_DATE),
-                         dpi=800)
+                         dpi=500)
     mag_figure.savefig(path +'Magnitudes {} to {}'.format(START_DATE, END_DATE),
-                       dpi=800)
+                       dpi=500)
 
 
 def store_data(earthquakes):

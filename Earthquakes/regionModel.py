@@ -48,7 +48,7 @@ class Region:
         figure = plot.figure()
         x,y = map(self.longitudes, self.latitudes)
         colors = map.scatter(
-            x, y, marker='o', s=80, lw=0, c=data[:,2], cmap=plot.cm.jet)
+            x, y, marker='o', s=20, lw=0, c=data[:,2], cmap=plot.cm.jet)
         plot.colorbar(colors, orientation='horizontal', pad=0.2)
         map.drawparallels(self.parallels, labels=[False,True,True,False])
         map.drawmeridians(self.meridians, labels=[True,False,False,True])
@@ -59,7 +59,7 @@ class Region:
     def plot_magnitudes(self, map, data):
         figure = plot.figure()
         x, y = map(self.longitudes, self.latitudes)
-        min_size = 20
+        min_size = 10
         mag_size = data[:,3]*min_size
         colors = map.scatter(
             x, y, marker='o', s=mag_size, lw=0, c=data[:, 3], cmap=plot.cm.jet)
