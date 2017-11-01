@@ -6,6 +6,10 @@ from settings import *
 
 
 def retrieve_seismic_data():
+    """
+    Requests data from the API.
+    Returns the raw data converted to JSON.
+    """
     base_url = BASE_URL
     format = FORMAT
     url = base_url + 'format=' + format + '&starttime=' + START_DATE + '&endtime=' + END_DATE
@@ -16,10 +20,18 @@ def retrieve_seismic_data():
 
 
 def is_valid_data(row):
+    """
+    Validates a row of data.
+    Returns True if valid.
+    """
     return False if row['properties']['mag'] <= 0 else True
 
 
 def create_earthquakes(earthquakes_data):
+    """
+    Creates Earthquake objects.
+    Returns a list containing earthquake objects.
+    """
     earthquakes = []
     for row in earthquakes_data['features']:
         if is_valid_data(row) == True:
@@ -30,6 +42,10 @@ def create_earthquakes(earthquakes_data):
 
 
 def prepare_data_to_plot(earthquakes):
+    """
+    Prepares the data to be plotted using Numpy library.
+    Returns a list of numpy arrays.
+    """
     arrays = []
     for earthquake in earthquakes:
         lat = earthquake.latitude
@@ -43,14 +59,15 @@ def prepare_data_to_plot(earthquakes):
     return data
 
 
-def plot_earthquakes(earthquakes):
+def generate_plots(earthquakes):
     """
-    Instantiate Region, create basemap object (and load lat ang lon data)
-    and plot earthquakes locations, depths and magnitudes.
+    Creates a Region object and a Basemap object (loading lat and lon data) and creates
+    the figures with locations, depths and magnitudes for the earthquakes.
+    Returns three figures (locations, depths and magnitudes).
     """
     data = prepare_data_to_plot(earthquakes)
 
-    region = Region(lat_column=0, lon_column=1)
+    region = Region()
 
     map = region.create_map_object(data)
 
@@ -61,29 +78,44 @@ def plot_earthquakes(earthquakes):
     return loc_figure, depth_figure, mag_figure
 
 
-def save_plots(earthquakes):
-    loc_figure, depth_figure, mag_figure = plot_earthquakes(earthquakes)
+def save_figures(path, earthquakes):
+    """
+    Saves the figures on the given path.
+    """
+    loc_figure, depth_figure, mag_figure = generate_plots(earthquakes)
 
-    loc_figure.savefig('figures/Locations {} to {}'.format(START_DATE, END_DATE),
+    loc_figure.savefig(path + 'Locations {} to {}'.format(START_DATE, END_DATE),
                        dpi=800)
-    depth_figure.savefig('figures/Depths {} to {}'.format(START_DATE, END_DATE),
+    depth_figure.savefig(path + 'Depths {} to {}'.format(START_DATE, END_DATE),
                          dpi=800)
-    mag_figure.savefig('figures/Magnitudes {} to {}'.format(START_DATE, END_DATE),
+    mag_figure.savefig(path +'Magnitudes {} to {}'.format(START_DATE, END_DATE),
                        dpi=800)
 
 
 def store_data(earthquakes):
+    """
+    Stores the data in the earthquakes database.
+    """
+
     create_earthquakes_table()
     for earthquake in earthquakes:
         earthquake.save()
 
 
 def main():
+    print('Retrieving data from API...')
     raw_data = retrieve_seismic_data()
+
+    print('Generating earthquakes objects...')
     earthquakes = create_earthquakes(raw_data)
 
+    print('Storing the data into earthquakes database...')
     store_data(earthquakes)
-    save_plots(earthquakes)
+
+    print('Saving figures to local machine...')
+    save_figures('figures/', earthquakes)
+
+    print('--- REQUESTED INFORMATION ---')
     query_earthquake_data(min_magnitude=5)
 
 

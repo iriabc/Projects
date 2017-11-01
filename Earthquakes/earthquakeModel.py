@@ -4,7 +4,17 @@ from settings import *
 
 class Earthquake:
     """
-    Set up the seismic info for a certain point
+    Seismic event where the surface of the Earth shakes, releasing energy in the
+    lithosphere and creating seismic waves.
+
+    Atributtes:
+        name        Name of the place where the event takes place
+        date        Date of the event
+        longitude   Geographic longitude
+        latitude    Geographic latitude
+        depth       Depth where the event takes place
+        magnitude   Number to quantify the size of the event measure using Richter scale
+
     """
     def __init__(self, data):
         self.name = data['properties']['place'].replace(',', '-')

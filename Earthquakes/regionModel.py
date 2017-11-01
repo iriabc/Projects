@@ -7,14 +7,15 @@ from settings import *
 
 class Region:
     """
-    lcrnrlon: longitude of lower left hand corner of the desired map domain (degrees).
-    llcrnrlat: latitude of lower left hand corner of the desired map domain (degrees).
-    urcrnrlon: longitude of upper right hand corner of the desired map domain (degrees).
-    urcrnrlat: latitude of upper right hand corner of the desired map domain (degrees).
+    Region of the Earth.
+
+    Atributtes:
+        latitudes   Geographic latitudes of the data points
+        longitudes  Geographic longitudes of the data points
+        parallels   Imaginary parallel circles of constant latitude on the earth's surface
+        meridians   Imaginary circles of constant longitude on the earth's surface
     """
-    def __init__(self, lat_column, lon_column):
-        self.lat_column = lat_column
-        self.lon_column = lon_column
+    def __init__(self):
         self.latitudes = []
         self.longitudes = []
         self.parallels = []
